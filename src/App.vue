@@ -1,4 +1,5 @@
 <script>
+  import api from './api'
   export default {
     name: 'App',
     data() {
@@ -13,10 +14,21 @@
     methods: {
       handleDoneBtnClick(event) {
         console.log(this.taskList)
+      },
+      async getAllTasks() {
+        const [tasks, error] = await api.fetchTasks()
+        if (error) {
+          return
+        }
+        this.taskList = tasks
       }
+    },
+    async created() {
+        await this.getAllTasks()
     }
   }
 </script>
+
 <template>
   <h1>todo</h1>
   <div>
@@ -30,4 +42,3 @@
     </div>
   </div>
 </template>
-
