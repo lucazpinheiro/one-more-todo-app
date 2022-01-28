@@ -10,6 +10,29 @@ async function fetchTasks() {
   }
 }
 
+async function updateTask(id, ops) {
+  try {
+    const rawResponse = await fetch(BASE_URL + `/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ops)
+    })
+    if (rawResponse.status !== 200) {
+      throw new Error(`Couldn't update task`)
+    }
+    const response = await rawResponse.json()
+    return [{
+      status: rawResponse.status,
+      response
+    }, null]
+  } catch (error) {
+    return [null, error]
+  }
+}
+
 export default {
-  fetchTasks
+  fetchTasks,
+  updateTask
 }

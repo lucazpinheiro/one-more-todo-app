@@ -12,14 +12,30 @@
       }
     },
     methods: {
-      handleDoneBtnClick(event) {
-        console.log(this.taskList)
+      /**
+       * @param {string} id 
+       */
+      async handleCompletedBtnClick(id) {
+        const taskPosition = this.taskList.findIndex((elem) => elem.id === id)
+        if (taskPosition === -1) {
+          // TODO: make a better warning to the user that this task couldn't be updated
+          return
+        }
+        const [updatedTask, error] = await api.updateTask(id, {
+          completed: !this.taskList[taskPosition].completed
+        })
+        if (error) {
+          // TODO: make a better warning to the user that this task couldn't be updated
+          return
+        }
+        this.taskList[taskPosition] = { ...updatedTask.response}
       },
       async getAllTasks() {
         const [tasks, error] = await api.fetchTasks()
         if (error) {
           return
         }
+        console.log(tasks)
         this.taskList = tasks
       }
     },
@@ -32,11 +48,18 @@
 <template>
   <h1>todo</h1>
   <div>
-    <div v-for="task in taskList">
+    <div v-for="task in taskList" :key="task.id">
       <div>
         <b>{{ task.title }}</b>
         <p>{{ task.description }}</p>
-        <button @click="handleDoneBtnClick">Done!</button>
+        <div>
+          <div v-if="task.completed">
+            <button @click="handleCompletedBtnClick(task.id)">Done! :)</button>
+          </div>
+          <div v-else>
+            <button @click="handleCompletedBtnClick(task.id)">Undone! :)</button>
+          </div>
+        </div>
       </div>
       <br>
     </div>
