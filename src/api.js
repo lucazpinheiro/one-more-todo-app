@@ -28,6 +28,25 @@ async function updateTask(id, ops) {
   }
 }
 
+async function createTask(ops) {
+  debugger
+  try {
+    const rawResponse = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ops)
+    })
+    if (rawResponse.status !== 201) {
+      throw new Error(`Couldn't create new task`)
+    }
+    return [rawResponse.status, null]
+  } catch (error) {
+    return [null, error]
+  }
+}
+
 async function deleteTask(id) {
   try {
     const rawResponse = await fetch(BASE_URL + `/${id}`, {
@@ -48,5 +67,6 @@ async function deleteTask(id) {
 export default {
   fetchTasks,
   updateTask,
-  deleteTask
+  deleteTask,
+  createTask
 }
