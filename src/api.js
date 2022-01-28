@@ -22,11 +22,24 @@ async function updateTask(id, ops) {
     if (rawResponse.status !== 200) {
       throw new Error(`Couldn't update task`)
     }
-    const response = await rawResponse.json()
-    return [{
-      status: rawResponse.status,
-      response
-    }, null]
+    return [rawResponse.status, null]
+  } catch (error) {
+    return [null, error]
+  }
+}
+
+async function deleteTask(id) {
+  try {
+    const rawResponse = await fetch(BASE_URL + `/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if (rawResponse.status !== 204) {
+      throw new Error(`Couldn't delete task`)
+    }
+    return [rawResponse.status, null]
   } catch (error) {
     return [null, error]
   }
@@ -34,5 +47,6 @@ async function updateTask(id, ops) {
 
 export default {
   fetchTasks,
-  updateTask
+  updateTask,
+  deleteTask
 }
