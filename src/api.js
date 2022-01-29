@@ -29,7 +29,6 @@ async function updateTask(id, ops) {
 }
 
 async function createTask(ops) {
-  debugger
   try {
     const rawResponse = await fetch(BASE_URL, {
       method: 'POST',
