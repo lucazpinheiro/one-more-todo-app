@@ -1,3 +1,5 @@
 ## TODO:
 
-- fix updating `completed` status does not triggering a rerendering of task list
+- break application in components
+- add better error handling, with messages for the user etc
+- put some style with css
